@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+    <h1>{{ object_list[0] }} </h1>
+
+
+<form action="" method="post">
+			<fieldset>
+				<legend>Зарегистрируйтесь</legend>
+				<p><label class="title" for="name">Ваше имя:</label>
+					 <input type="text" name="name" id="name"><br />
+					 <label class="title" for="email">Ваш email:</label>
+					 <input type="text" name="email" id="email"></p>
+				<p><label for="location" class="title">Ближайший центр:</label>
+					 <select name="location" id="location">
+						 <option value="Moscow">Москва</option>
+						 <option value="Piter">Санкт-Петербург</option>
+						 <option value="Ekaterenburg">Екатеринбург</option>
+					 </select></p>
+				<span class="title">Являетесь участником?</span>
+				<label><input type="radio" name="member" value="Yes" /> Да</label>
+				<label><input type="radio" name="member" value="No" /> Нет</label></p>
+			</fieldset>
+ 	    <div class="submit"><input type="submit" value="Регистрация" /></div>
+
+
+</body>
+</html>

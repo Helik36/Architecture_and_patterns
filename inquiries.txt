@@ -1,0 +1,2 @@
+2021-04-19 18:35:40.691020: {'name': 'gera', 'email': 'gera@mail.ru', 'location': 'Moscow', 'member': 'No'} 
+ 
