@@ -1,8 +1,12 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <title>о Нас</title>
+    {% block menu %}
+	    {% include "inc-menu.html" %}
+    {% endblock %}
+
         <h1> {{ object_list[0] }} </h1>
 </head>
 <body>
