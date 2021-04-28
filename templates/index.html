@@ -1,14 +1,11 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Authors</title>
-</head>
-<body>
-    <a href="index.html">Главная</a>
-    <a href="contacts.html">Контакты </a>
-    <ul>
-        <p><h1> {{ object_list[0] }} </h1></p>
-    </ul>
-</body>
-</html>
+{% extends "base.html" %}
+{% block title %}
+    Мой сайт
+{% endblock %}
+{% block menu %}
+	{% include "inc-menu.html" %}
+{% endblock %}
+{% block body %}
+    {% include "inc_contacts.html" %}
+{% endblock %}
+

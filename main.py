@@ -7,7 +7,6 @@ import datetime
 routes = {
     '/': views.index_view,
     '/about/': views.about_view,
-    '/contacts/': views.page_contants
 }
 
 w_time = datetime.datetime.now()

@@ -1,2 +1,6 @@
 2021-04-19 18:35:40.691020: {'name': 'gera', 'email': 'gera@mail.ru', 'location': 'Moscow', 'member': 'No'} 
  
+2021-04-21 23:54:42.160285: {'name': 'Тестик', 'email': 'йцуйц', 'location': 'Moscow', 'member': 'No'} 
+ 
+2021-04-22 00:22:46.735797: {'name': 'Гера', 'email': 'geraea@mamma.ru', 'location': 'Moscow', 'member': 'No'} 
+ 
