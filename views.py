@@ -1,36 +1,50 @@
+from datetime import date
+
 from framework import render
 from patterns import Engine, Logger
+from patterns.structural_patterns import AppRoute, Debug
 
 site = Engine()
 logger = Logger('main')
 
+routes = {}
+
 # page controller
-def index_view(request):
-    print(request)
-    index = 'Главная страница'
-    return '200 OK', render('index.html', object_list = [index])
+# контроллер - главная страница
+@AppRoute(routes=routes, url='/')
+class Index:
+    @Debug(name='Index')
+    def __call__(self, request):
+        return '200 OK', render('index.html', objects_list=site.categories)
 
 
-def about_view(request):
-    #print(request)
-    about = 'О нас '
-    return '200 OK', render('about.html', object_list = [about] )
-
-
-def not_found_404_view(request):
-    #print(request)
-    not_f_404 = "404 PAGE Not Found"
-    return '404 WHAT', render('404.html', object_list = [not_f_404])
+# контроллер "О проекте"
+@AppRoute(routes=routes, url='/about/')
+class About:
+    @Debug(name='About')
+    def __call__(self, request):
+        return '200 OK', render('about.html')
 
 
 # контроллер - Расписания
+@AppRoute(routes=routes, url='/study_programs/')
 class StudyPrograms:
+    @Debug(name='StudyPrograms')
     def __call__(self, request):
         return '200 OK', render('study-programs.html', data=date.today())
 
 
+# контроллер 404
+class NotFound404:
+    @Debug(name='NotFound404')
+    def __call__(self, request):
+        return '404 WHAT', '404 PAGE Not Found'
+
+
 # контроллер - список курсов
+@AppRoute(routes=routes, url='/courses-list/')
 class CoursesList:
+    @Debug(name='CoursesList')
     def __call__(self, request):
         logger.log('Список курсов')
         try:
@@ -41,9 +55,11 @@ class CoursesList:
 
 
 # контроллер - создать курс
+@AppRoute(routes=routes, url='/create-course/')
 class CreateCourse:
     category_id = -1
 
+    @Debug(name='CreateCourse')
     def __call__(self, request):
         if request['method'] == 'POST':
             # метод пост
@@ -73,7 +89,9 @@ class CreateCourse:
 
 
 # контроллер - создать категорию
+@AppRoute(routes=routes, url='/create-category/')
 class CreateCategory:
+    @Debug(name='CreateCategory')
     def __call__(self, request):
 
         if request['method'] == 'POST':
@@ -101,14 +119,18 @@ class CreateCategory:
 
 
 # контроллер - список категорий
+@AppRoute(routes=routes, url='/category-list/')
 class CategoryList:
+    @Debug(name='CategoryList')
     def __call__(self, request):
         logger.log('Список категорий')
         return '200 OK', render('category_list.html', objects_list=site.categories)
 
 
 # контроллер - копировать курс
+@AppRoute(routes=routes, url='/copy-course/')
 class CopyCourse:
+    @Debug(name='CopyCourse')
     def __call__(self, request):
         request_params = request['request_params']
 
@@ -124,3 +146,6 @@ class CopyCourse:
             return '200 OK', render('course_list.html', objects_list=site.courses)
         except KeyError:
             return '200 OK', 'No courses have been added yet'
+
+
+

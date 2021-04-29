@@ -1,31 +1,21 @@
-from wsgiref.util import setup_testing_defaults
-from framework import GetRequests, PostRequests
-import views
 import quopri
-import datetime
+from framework import GetRequests, PostRequests
 
-routes = {
-    '/': views.index_view,
-    '/about/': views.about_view,
-    '/study_programs/': views.StudyPrograms(),
-    '/courses-list/': views.CoursesList(),
-    '/create-course/': views.CreateCourse(),
-    '/create-category/': views.CreateCategory(),
-    '/category-list/': views.CategoryList(),
-    '/copy-course/': views.CopyCourse()
-}
+import datetime
 
 w_time = datetime.datetime.now()
 
+class PageNotFound404:
+    def __call__(self, request):
+        return '404 WHAT', '404 PAGE Not Found'
+
 class Application:
 
-    def __init__(self, routes):
-        self.routes = routes
+    def __init__(self, roustes_obj, fronts_obj):
+        self.routes_lst = roustes_obj
+        self.fronts_lst = fronts_obj
 
     def __call__(self, environ, start_response):
-        setup_testing_defaults(environ)
-        print('work')
-
         # получаем адрес, по которому выполнен переход
         path = environ['PATH_INFO']
 
@@ -36,6 +26,7 @@ class Application:
         request = {}
         # Получаем все данные запроса
         method = environ['REQUEST_METHOD']
+
         request['method'] = method
 
         if method == 'POST':
@@ -54,16 +45,23 @@ class Application:
 
         # находим нужный контроллер
         # отработка паттерна page controller
-        if path in self.routes:
-            view = self.routes[path]
+        if path in self.routes_lst:
+            view = self.routes_lst[path]
         else:
-            view = views.not_found_404_view
+            view = PageNotFound404()
+
+        # наполняем словарь request элементами
+        # этот словарь получат все контроллеры
+        # отработка паттерна front controller
+        for front in self.fronts_lst:
+            front(request)
 
         # запуск контроллера с передачей объекта request
         code, body = view(request)
         start_response(code, [('Content-Type', 'text/html')])
         return [body.encode('utf-8')]
 
+    @staticmethod
     def decode_value(data):
         new_data = {}
         for k, v in data.items():
@@ -72,3 +70,33 @@ class Application:
             new_data[k] = val_decode_str
         return new_data
 
+
+
+# Новый вид WSGI-application.
+# Первый — логирующий (такой же, как основной,
+# только для каждого запроса выводит информацию
+# (тип запроса и параметры) в консоль.
+class DebugApplication(Application):
+
+    def __init__(self, routes_obj, fronts_obj):
+        self.application = Application(routes_obj, fronts_obj)
+        super().__init__(routes_obj, fronts_obj)
+
+    def __call__(self, env, start_response):
+        print('DEBUG MODE')
+        print(env)
+        return self.application(env, start_response)
+
+
+# Новый вид WSGI-application.
+# Второй — фейковый (на все запросы пользователя отвечает:
+# 200 OK, Hello from Fake).
+class FakeApplication(Application):
+
+    def __init__(self, routes_obj, fronts_obj):
+        self.application = Application(routes_obj, fronts_obj)
+        super().__init__(routes_obj, fronts_obj)
+
+    def __call__(self, env, start_response):
+        start_response('200 OK', [('Content-Type', 'text/html')])
+        return [b'Hello from Fake']

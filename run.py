@@ -1,9 +1,11 @@
 from wsgiref.simple_server import make_server
-from main import Application, routes
+
+from main import Application
+from url import fronts
+from views import routes
 
 
-
-application = Application(routes)
+application = Application(routes, fronts)
 
 if __name__ == '__main__':
     with make_server('', 8000, application) as httpd:
