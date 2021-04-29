@@ -7,6 +7,12 @@ import datetime
 routes = {
     '/': views.index_view,
     '/about/': views.about_view,
+    '/study_programs/': views.StudyPrograms(),
+    '/courses-list/': views.CoursesList(),
+    '/create-course/': views.CreateCourse(),
+    '/create-category/': views.CreateCategory(),
+    '/category-list/': views.CategoryList(),
+    '/copy-course/': views.CopyCourse()
 }
 
 w_time = datetime.datetime.now()
