@@ -1,5 +1,5 @@
 import quopri
-from framework import GetRequests, PostRequests
+from framework.requests import GetRequests, PostRequests
 
 import datetime
 
