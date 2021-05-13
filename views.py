@@ -1,9 +1,9 @@
 from datetime import date
 
-from framework import render
-from patterns import Engine, Logger
+from framework.templates import render
+from patterns.сreational_patterns import Engine, Logger
 from patterns.structural_patterns import AppRoute, Debug
-from patterns import EmailNotifier, SmsNotifier, TemplateView, ListView, CreateView, BaseSerializer
+from patterns.behavioral_patterns import EmailNotifier, SmsNotifier, TemplateView, ListView, CreateView, BaseSerializer
 
 
 site = Engine()

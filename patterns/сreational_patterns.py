@@ -1,5 +1,7 @@
 import copy
 import quopri
+from patterns.behavioral_patterns import ConsoleWriter
+from patterns.architectural_system_pattern_unit_of_work import DomainObject
 
 
 # абстрактный пользователь
@@ -13,8 +15,11 @@ class Teacher(User):
 
 
 # студент
-class Student(User):
-    pass
+class Student(User, DomainObject):
+
+    def __init__(self, name):
+        self.courses = []
+        super().__init__(name)
 
 
 # порождающий паттерн Абстрактная фабрика - фабрика пользователей
@@ -97,8 +102,8 @@ class Engine:
         self.categories = []
 
     @staticmethod
-    def create_user(type_):
-        return UserFactory.create(type_)
+    def create_user(type_, name):
+        return UserFactory.create(type_, name)
 
     @staticmethod
     def create_category(name, category=None):
@@ -106,7 +111,6 @@ class Engine:
 
     def find_category_by_id(self, id):
         for item in self.categories:
-            print('item', item.id)
             if item.id == id:
                 return item
         raise Exception(f'Нет категории с id = {id}')
@@ -115,11 +119,16 @@ class Engine:
     def create_course(type_, name, category):
         return CourseFactory.create(type_, name, category)
 
-    def get_course(self, name):
+    def get_course(self, name) -> Course:
         for item in self.courses:
             if item.name == name:
                 return item
         return None
+
+    def get_student(self, name) -> Student:
+        for item in self.students:
+            if item.name == name:
+                return item
 
     @staticmethod
     def decode_value(val):
@@ -148,11 +157,14 @@ class SingletonByName(type):
             return cls.__instance[name]
 
 
+# Заметка, можно применить стратегию если добавить стратегию логирования
 class Logger(metaclass=SingletonByName):
 
-    def __init__(self, name):
+    def __init__(self, name, writer=ConsoleWriter()):
         self.name = name
+        self.writer = writer
 
-    @staticmethod
-    def log(text):
-        print('log--->', text)
+    def log(self, text):
+        text = f'log---> {text}'
+        self.writer.write(text)
+

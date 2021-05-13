@@ -1,6 +1,5 @@
 import jsonpickle
 from framework.templates import render
-from .creational_patterns import SingletonByName
 
 
 # поведенческий паттерн - наблюдатель
